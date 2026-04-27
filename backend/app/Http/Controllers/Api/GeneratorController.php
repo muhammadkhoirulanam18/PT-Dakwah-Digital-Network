@@ -10,6 +10,17 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class GeneratorController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $salesPages = SalesPage::where('user_id', $request->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'data' => $salesPages,
+        ]);
+    }
+
     public function generate(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -69,6 +80,58 @@ class GeneratorController extends Controller
 
         return response()->json([
             'data' => $salesPage,
+        ]);
+    }
+
+    public function regenerate(Request $request, $id): JsonResponse
+    {
+        $salesPage = SalesPage::where('user_id', $request->user()->id)->findOrFail($id);
+
+        $prompt = "Generate a high-converting sales page content for the following product:
+        Product Name: {$salesPage->product_name}
+        Description: {$salesPage->description}
+        Audience: " . ($salesPage->audience ?? 'General') . "
+        Price: " . ($salesPage->price ?? 'Contact us') . "
+        USP: " . ($salesPage->usp ?? 'Not specified') . "
+
+        Return the response in JSON format with the following keys:
+        - headline
+        - subheadline
+        - benefits (array)
+        - features (array)
+        - testimonial
+        - pricing
+        - cta";
+
+        $result = OpenAI::chat()->create([
+            'model' => 'gpt-3.5-turbo-0125',
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a professional copywriter. Respond ONLY with JSON.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+            'response_format' => ['type' => 'json_object'],
+        ]);
+
+        $generatedContent = json_decode($result->choices[0]->message->content, true);
+
+        $salesPage->update([
+            'generated_content' => $generatedContent,
+        ]);
+
+        return response()->json([
+            'message' => 'Sales page content regenerated successfully.',
+            'data'    => $salesPage,
+        ]);
+    }
+
+    public function destroy(Request $request, $id): JsonResponse
+    {
+        $salesPage = SalesPage::where('user_id', $request->user()->id)->findOrFail($id);
+        
+        $salesPage->delete();
+
+        return response()->json([
+            'message' => 'Sales page deleted successfully.',
         ]);
     }
 }
