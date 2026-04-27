@@ -79,38 +79,39 @@ export default function PreviewPage() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${data.product_name} - Sales Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0a0a0f; color: white; font-family: sans-serif; }
+        body { background-color: #0a0a0f; color: white; font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="selection:bg-violet-500/30">
+<body class="selection:bg-violet-500/30 antialiased text-white/80">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-violet-600/10 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] bg-indigo-600/10 rounded-full blur-[120px]"></div>
     </div>
-    <div class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-24">
+    <div class="relative z-10 max-w-5xl mx-auto px-6 md:px-8 py-12">
         
-        <section class="text-center pt-10 pb-4">
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+        <section class="text-center py-20 md:py-32">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-8 bg-gradient-to-br from-white via-white/90 to-white/40 bg-clip-text text-transparent leading-[1.1]">
                 ${content.headline || 'Your Headline Here'}
             </h1>
-            <p class="text-lg md:text-xl text-white/60 max-w-3xl mx-auto">
+            <p class="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed font-medium">
                 ${content.subheadline || 'Subheadline will appear here...'}
             </p>
         </section>
 
         ${content.benefits && content.benefits.length > 0 ? `
-        <section class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12">
-            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center">Kenapa Memilih Kami?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section class="py-16 md:py-24">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Kenapa Memilih Kami?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 ${content.benefits.map(benefit => `
-                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
-                    <div class="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center mb-4 text-violet-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[2rem] hover:bg-white/[0.05] transition-all duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center mb-6 text-violet-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
-                    <p class="text-white/80">${benefit}</p>
+                    <p class="text-white/70 leading-relaxed text-lg">${benefit}</p>
                 </div>
                 `).join('')}
             </div>
@@ -118,17 +119,17 @@ export default function PreviewPage() {
         ` : ''}
 
         ${content.features && content.features.length > 0 ? `
-        <section>
-            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center">Fitur Unggulan</h2>
-            <div class="space-y-4 max-w-3xl mx-auto">
+        <section class="py-16 md:py-24">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Fitur Unggulan</h2>
+            <div class="space-y-4 md:space-y-6 max-w-3xl mx-auto">
                 ${content.features.map(feature => `
-                <div class="flex items-start gap-4 p-4 rounded-xl">
-                    <div class="mt-1 flex-shrink-0 text-indigo-400">
+                <div class="flex items-start gap-5 p-6 rounded-2xl hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
+                    <div class="mt-1 flex-shrink-0 text-violet-400 p-2 bg-violet-500/10 rounded-xl">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <p class="text-lg text-white/90">${feature}</p>
+                    <p class="text-xl text-white/90 font-medium leading-relaxed">${feature}</p>
                 </div>
                 `).join('')}
             </div>
@@ -136,14 +137,15 @@ export default function PreviewPage() {
         ` : ''}
 
         ${content.testimonial ? `
-        <section class="max-w-4xl mx-auto">
-            <blockquote class="relative p-8 md:p-12 bg-gradient-to-br from-violet-900/20 to-indigo-900/20 border border-violet-500/20 rounded-3xl text-center">
-                <p class="text-xl md:text-2xl font-medium italic text-white/90 relative z-10 leading-relaxed">
+        <section class="py-16 md:py-24 max-w-4xl mx-auto">
+            <blockquote class="relative p-10 md:p-16 bg-gradient-to-br from-violet-600/10 via-transparent to-indigo-600/10 border border-white/10 rounded-[2.5rem] text-center overflow-hidden">
+                <p class="text-2xl md:text-3xl font-medium italic text-white/90 relative z-10 leading-relaxed tracking-tight">
                     "${content.testimonial}"
                 </p>
-                <div class="mt-6 flex items-center justify-center gap-3">
-                    <div class="text-left">
-                        <p class="font-semibold text-white/90">Pelanggan Puas</p>
+                <div class="mt-10 flex items-center justify-center gap-4">
+                    <div class="text-center">
+                        <p class="font-bold text-white text-lg">Pelanggan Puas</p>
+                        <p class="text-violet-400 font-medium mt-1">Verified Buyer</p>
                     </div>
                 </div>
             </blockquote>
@@ -151,23 +153,27 @@ export default function PreviewPage() {
         ` : ''}
 
         ${content.pricing ? `
-        <section class="flex justify-center">
-            <div class="w-full max-w-md p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
-                <h2 class="text-2xl font-bold mb-2">Harga Spesial</h2>
-                <div class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 my-6">
+        <section class="py-16 md:py-24 flex justify-center">
+            <div class="w-full max-w-lg p-10 md:p-12 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-white/5 border border-white/20 text-center relative overflow-hidden group">
+                <h2 class="text-2xl font-bold mb-4 text-white/80">Harga Spesial</h2>
+                <div class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 my-8 tracking-tighter">
                     ${content.pricing}
                 </div>
-                <button class="w-full py-4 rounded-xl bg-white text-black font-bold">
+                <p class="text-lg text-white/60 mb-10">Investasi terbaik untuk kebutuhan Anda hari ini.</p>
+                <button class="w-full py-5 rounded-2xl bg-white text-black font-bold text-lg hover:bg-white/90 transition-transform active:scale-95 shadow-xl shadow-white/10">
                     Dapatkan Sekarang
                 </button>
             </div>
         </section>
         ` : ''}
 
-        <section class="text-center py-12 md:py-20">
-            <h2 class="text-3xl md:text-5xl font-bold mb-8">${content.cta || 'Siap untuk memulai?'}</h2>
-            <button class="px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg">
+        <section class="text-center py-20 md:py-32">
+            <h2 class="text-4xl md:text-6xl font-black mb-10 tracking-tight text-white">${content.cta || 'Siap untuk memulai?'}</h2>
+            <button class="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-lg md:text-xl shadow-2xl shadow-violet-500/30 transition-all duration-300 hover:scale-105 active:scale-95">
                 Ambil Penawaran Terbatas Ini
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
             </button>
         </section>
 
@@ -187,33 +193,36 @@ export default function PreviewPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white selection:bg-violet-500/30">
+    <div className="min-h-screen bg-[#0a0a0f] text-white/80 selection:bg-violet-500/30 antialiased font-sans">
       {/* Background Ambient Glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl" />
+        <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-violet-600/10 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] bg-indigo-600/10 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
         {/* Navigation / Header */}
-        <header className="border-b border-white/10 bg-white/5 backdrop-blur-md sticky top-0 z-50">
+        <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Link href="/dashboard" className="text-white/60 hover:text-white transition-colors">
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
-              <span className="font-semibold text-white/90 text-sm border-l border-white/20 pl-3">
-                Preview: {data.product_name}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xs text-white/50 font-medium uppercase tracking-wider">Preview Mode</span>
+                <span className="font-bold text-white text-sm">
+                  {data.product_name}
+                </span>
+              </div>
             </div>
             <button
               onClick={handleExportHTML}
-              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-white/90 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/10"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
               Export HTML
             </button>
@@ -221,31 +230,31 @@ export default function PreviewPage() {
         </header>
 
         {/* Landing Page Content */}
-        <main className="max-w-5xl mx-auto px-4 py-12 space-y-24">
+        <main className="max-w-5xl mx-auto px-6 md:px-8 py-12">
           
           {/* Hero Section */}
-          <section className="text-center pt-10 pb-4">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+          <section className="text-center py-20 md:py-32">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 bg-gradient-to-br from-white via-white/90 to-white/40 bg-clip-text text-transparent leading-[1.1]">
               {content.headline || 'Your Headline Here'}
             </h1>
-            <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed font-medium">
               {content.subheadline || 'Subheadline will appear here...'}
             </p>
           </section>
 
           {/* Benefits Section */}
           {content.benefits && content.benefits.length > 0 && (
-            <section className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12">
-              <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center">Kenapa Memilih Kami?</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section className="py-16 md:py-24">
+              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Kenapa Memilih Kami?</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {content.benefits.map((benefit, index) => (
-                  <div key={index} className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center mb-4 text-violet-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div key={index} className="bg-white/[0.03] border border-white/10 p-8 rounded-[2rem] hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center mb-6 text-violet-400">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <p className="text-white/80">{benefit}</p>
+                    <p className="text-white/70 leading-relaxed text-lg">{benefit}</p>
                   </div>
                 ))}
               </div>
@@ -254,17 +263,17 @@ export default function PreviewPage() {
 
           {/* Features Section */}
           {content.features && content.features.length > 0 && (
-            <section>
-              <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center">Fitur Unggulan</h2>
-              <div className="space-y-4 max-w-3xl mx-auto">
+            <section className="py-16 md:py-24">
+              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Fitur Unggulan</h2>
+              <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
                 {content.features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors">
-                    <div className="mt-1 flex-shrink-0 text-indigo-400">
+                  <div key={index} className="flex items-start gap-5 p-6 rounded-2xl hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
+                    <div className="mt-1 flex-shrink-0 text-violet-400 p-2 bg-violet-500/10 rounded-xl">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <p className="text-lg text-white/90">{feature}</p>
+                    <p className="text-xl text-white/90 font-medium leading-relaxed">{feature}</p>
                   </div>
                 ))}
               </div>
@@ -273,21 +282,15 @@ export default function PreviewPage() {
 
           {/* Testimonial Section */}
           {content.testimonial && (
-            <section className="max-w-4xl mx-auto">
-              <blockquote className="relative p-8 md:p-12 bg-gradient-to-br from-violet-900/20 to-indigo-900/20 border border-violet-500/20 rounded-3xl text-center">
-                <svg className="absolute top-6 left-6 w-10 h-10 text-violet-500/20" fill="currentColor" viewBox="0 0 32 32">
-                  <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                </svg>
-                <p className="text-xl md:text-2xl font-medium italic text-white/90 relative z-10 leading-relaxed">
+            <section className="py-16 md:py-24 max-w-4xl mx-auto">
+              <blockquote className="relative p-10 md:p-16 bg-gradient-to-br from-violet-600/10 via-transparent to-indigo-600/10 border border-white/10 rounded-[2.5rem] text-center overflow-hidden">
+                <p className="text-2xl md:text-3xl font-medium italic text-white/90 relative z-10 leading-relaxed tracking-tight">
                   "{content.testimonial}"
                 </p>
-                <div className="mt-6 flex items-center justify-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <span className="text-white/50 text-sm">👤</span>
-                  </div>
-                  <div className="text-left">
-                    <p className="font-semibold text-white/90">Pelanggan Puas</p>
-                    <p className="text-sm text-white/50">Verified Buyer</p>
+                <div className="mt-10 flex items-center justify-center gap-4">
+                  <div className="text-center">
+                    <p className="font-bold text-white text-lg">Pelanggan Puas</p>
+                    <p className="text-violet-400 font-medium mt-1">Verified Buyer</p>
                   </div>
                 </div>
               </blockquote>
@@ -296,26 +299,31 @@ export default function PreviewPage() {
 
           {/* Pricing Section */}
           {content.pricing && (
-            <section className="flex justify-center">
-              <div className="w-full max-w-md p-8 rounded-3xl bg-white/5 border border-white/10 text-center relative overflow-hidden group hover:border-violet-500/50 transition-colors">
-                <div className="absolute inset-0 bg-gradient-to-b from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <h2 className="text-2xl font-bold mb-2">Harga Spesial</h2>
-                <div className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 my-6">
-                  {content.pricing}
+            <section className="py-16 md:py-24 flex justify-center">
+              <div className="w-full max-w-lg p-10 md:p-12 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-white/5 border border-white/20 text-center relative overflow-hidden group hover:border-violet-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/20">
+                <div className="absolute inset-0 bg-gradient-to-b from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative z-10">
+                  <h2 className="text-2xl font-bold mb-4 text-white/80">Harga Spesial</h2>
+                  <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 my-8 tracking-tighter">
+                    {content.pricing}
+                  </div>
+                  <p className="text-lg text-white/60 mb-10">Investasi terbaik untuk kebutuhan Anda hari ini.</p>
+                  <button className="w-full py-5 rounded-2xl bg-white text-black font-bold text-lg hover:bg-white/90 transition-transform active:scale-95 shadow-xl shadow-white/10">
+                    Dapatkan Sekarang
+                  </button>
                 </div>
-                <p className="text-white/60 mb-8">Investasi terbaik untuk kebutuhan Anda hari ini.</p>
-                <button className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-white/90 transition-colors">
-                  Dapatkan Sekarang
-                </button>
               </div>
             </section>
           )}
 
           {/* CTA Section */}
-          <section className="text-center py-12 md:py-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-8">{content.cta || 'Siap untuk memulai?'}</h2>
-            <button className="px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-lg shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all hover:scale-105 active:scale-95">
+          <section className="text-center py-20 md:py-32">
+            <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tight text-white">{content.cta || 'Siap untuk memulai?'}</h2>
+            <button className="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-lg md:text-xl shadow-2xl shadow-violet-500/30 transition-all duration-300 hover:scale-105 active:scale-95 group">
               Ambil Penawaran Terbatas Ini
+              <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </button>
           </section>
 
