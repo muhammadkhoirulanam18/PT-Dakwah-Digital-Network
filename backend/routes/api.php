@@ -12,5 +12,6 @@ Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
         Route::post('/generate', [GeneratorController::class, 'generate']);
+        Route::get('/sales-pages/{id}', [GeneratorController::class, 'show']);
     });
 });

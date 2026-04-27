@@ -62,4 +62,13 @@ class GeneratorController extends Controller
             'data'    => $salesPage,
         ]);
     }
+
+    public function show(Request $request, $id): JsonResponse
+    {
+        $salesPage = SalesPage::where('user_id', $request->user()->id)->findOrFail($id);
+
+        return response()->json([
+            'data' => $salesPage,
+        ]);
+    }
 }
