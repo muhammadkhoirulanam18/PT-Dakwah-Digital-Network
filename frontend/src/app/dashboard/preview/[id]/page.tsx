@@ -100,11 +100,11 @@ export default function PreviewPage() {
             </p>
         </section>
 
-        ${content.benefits && content.benefits.length > 0 ? `
+        ${Array.isArray(content.benefits) && content.benefits.length > 0 ? `
         <section class="py-16 md:py-24">
             <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Kenapa Memilih Kami?</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                ${content.benefits.map(benefit => `
+                ${content.benefits?.map(benefit => `
                 <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[2rem] hover:bg-white/[0.05] transition-all duration-300">
                     <div class="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center mb-6 text-violet-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,11 +118,11 @@ export default function PreviewPage() {
         </section>
         ` : ''}
 
-        ${content.features && content.features.length > 0 ? `
+        ${Array.isArray(content.features) && content.features.length > 0 ? `
         <section class="py-16 md:py-24">
             <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Fitur Unggulan</h2>
             <div class="space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                ${content.features.map(feature => `
+                ${content.features?.map(feature => `
                 <div class="flex items-start gap-5 p-6 rounded-2xl hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
                     <div class="mt-1 flex-shrink-0 text-violet-400 p-2 bg-violet-500/10 rounded-xl">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,11 +243,11 @@ export default function PreviewPage() {
           </section>
 
           {/* Benefits Section */}
-          {content.benefits && content.benefits.length > 0 && (
+          {Array.isArray(content.benefits) && content.benefits.length > 0 && (
             <section className="py-16 md:py-24">
               <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Kenapa Memilih Kami?</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                {content.benefits.map((benefit, index) => (
+                {content.benefits?.map((benefit, index) => (
                   <div key={index} className="bg-white/[0.03] border border-white/10 p-8 rounded-[2rem] hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-1">
                     <div className="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center mb-6 text-violet-400">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,11 +262,11 @@ export default function PreviewPage() {
           )}
 
           {/* Features Section */}
-          {content.features && content.features.length > 0 && (
+          {Array.isArray(content.features) && content.features.length > 0 && (
             <section className="py-16 md:py-24">
               <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-white">Fitur Unggulan</h2>
               <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                {content.features.map((feature, index) => (
+                {content.features?.map((feature, index) => (
                   <div key={index} className="flex items-start gap-5 p-6 rounded-2xl hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
                     <div className="mt-1 flex-shrink-0 text-violet-400 p-2 bg-violet-500/10 rounded-xl">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
