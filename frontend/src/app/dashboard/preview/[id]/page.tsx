@@ -69,6 +69,123 @@ export default function PreviewPage() {
 
   const content = data.generated_content || {};
 
+  const handleExportHTML = () => {
+    if (!data) return;
+    
+    const htmlContent = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${data.product_name} - Sales Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0a0f; color: white; font-family: sans-serif; }
+    </style>
+</head>
+<body class="selection:bg-violet-500/30">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 py-12 space-y-24">
+        
+        <section class="text-center pt-10 pb-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+                ${content.headline || 'Your Headline Here'}
+            </h1>
+            <p class="text-lg md:text-xl text-white/60 max-w-3xl mx-auto">
+                ${content.subheadline || 'Subheadline will appear here...'}
+            </p>
+        </section>
+
+        ${content.benefits && content.benefits.length > 0 ? `
+        <section class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center">Kenapa Memilih Kami?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${content.benefits.map(benefit => `
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
+                    <div class="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center mb-4 text-violet-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <p class="text-white/80">${benefit}</p>
+                </div>
+                `).join('')}
+            </div>
+        </section>
+        ` : ''}
+
+        ${content.features && content.features.length > 0 ? `
+        <section>
+            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center">Fitur Unggulan</h2>
+            <div class="space-y-4 max-w-3xl mx-auto">
+                ${content.features.map(feature => `
+                <div class="flex items-start gap-4 p-4 rounded-xl">
+                    <div class="mt-1 flex-shrink-0 text-indigo-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-lg text-white/90">${feature}</p>
+                </div>
+                `).join('')}
+            </div>
+        </section>
+        ` : ''}
+
+        ${content.testimonial ? `
+        <section class="max-w-4xl mx-auto">
+            <blockquote class="relative p-8 md:p-12 bg-gradient-to-br from-violet-900/20 to-indigo-900/20 border border-violet-500/20 rounded-3xl text-center">
+                <p class="text-xl md:text-2xl font-medium italic text-white/90 relative z-10 leading-relaxed">
+                    "${content.testimonial}"
+                </p>
+                <div class="mt-6 flex items-center justify-center gap-3">
+                    <div class="text-left">
+                        <p class="font-semibold text-white/90">Pelanggan Puas</p>
+                    </div>
+                </div>
+            </blockquote>
+        </section>
+        ` : ''}
+
+        ${content.pricing ? `
+        <section class="flex justify-center">
+            <div class="w-full max-w-md p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
+                <h2 class="text-2xl font-bold mb-2">Harga Spesial</h2>
+                <div class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 my-6">
+                    ${content.pricing}
+                </div>
+                <button class="w-full py-4 rounded-xl bg-white text-black font-bold">
+                    Dapatkan Sekarang
+                </button>
+            </div>
+        </section>
+        ` : ''}
+
+        <section class="text-center py-12 md:py-20">
+            <h2 class="text-3xl md:text-5xl font-bold mb-8">${content.cta || 'Siap untuk memulai?'}</h2>
+            <button class="px-8 py-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg">
+                Ambil Penawaran Terbatas Ini
+            </button>
+        </section>
+
+    </div>
+</body>
+</html>`;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${data.product_name.replace(/\s+/g, '-').toLowerCase()}-sales-page.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white selection:bg-violet-500/30">
       {/* Background Ambient Glow */}
@@ -91,6 +208,15 @@ export default function PreviewPage() {
                 Preview: {data.product_name}
               </span>
             </div>
+            <button
+              onClick={handleExportHTML}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export HTML
+            </button>
           </div>
         </header>
 
