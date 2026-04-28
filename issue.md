@@ -1,64 +1,74 @@
-# Issue: Create Preview Page for Generated Sales Page
+# Issue: Quality Assurance (QA) & Production Verification
 
-## Description
-Create a preview page that renders the generated JSON content into a complete, modern, and clean landing page UI.
+## 🎯 Objektif
+Tugas ini ditujukan untuk Junior Programmer atau AI Model. Tujuan utama dari tugas ini adalah untuk melakukan verifikasi langsung di lingkungan *production* (produksi) guna memastikan semua fitur utama aplikasi berjalan dengan lancar tanpa kendala.
 
-## Requirements
-* Render the JSON data into specific landing page sections:
-  * Hero (headline, subheadline)
-  * Benefits (array)
-  * Features (array)
-  * Testimonial
-  * Pricing
-  * CTA (Call to Action)
-* UI Design: Modern, clean, responsive (mobile-friendly) using Tailwind CSS.
-
-## Rules
-* No explanation, code only.
+## 📝 Checklist Utama
+- [ ] Login dan Register berfungsi normal
+- [ ] Fitur Generate Sales Page berhasil membuat konten
+- [ ] Halaman Preview UI tampil dengan benar, rapi, dan responsif
+- [ ] Data History (riwayat pembuatan sales page) tersimpan dan dapat diakses
+- [ ] Tidak ada error di *browser console* pada semua halaman
 
 ---
 
-## Detailed Implementation Steps
-*(Panduan ini ditujukan untuk Junior Programmer atau AI Model untuk memandu proses implementasi yang terstruktur).*
+## 🛠️ Tahapan Implementasi & Pengujian (Step-by-Step Guide)
 
-### Tahap 1: Setup File dan Routing Dinamis
-Buat file halaman baru di project frontend Next.js Anda yang menggunakan *dynamic routing* untuk menerima parameter ID dari sales page.
-*   **Lokasi File:** Buat folder dan file di `src/app/dashboard/preview/[id]/page.tsx`.
-*   **Tipe Komponen:** Tambahkan direktif `'use client';` di bagian paling atas karena kita akan membutuhkan *hooks* untuk *data fetching* dan mengambil parameter URL.
+Silakan ikuti langkah-langkah pengujian berikut secara berurutan. Panduan ini dirancang sangat detail agar mudah diikuti.
 
-### Tahap 2: Manajemen State dan Pengambilan Data (Data Fetching)
-1.  Gunakan hook `useParams` dari modul `next/navigation` untuk mengekstrak parameter `id` dari URL.
-2.  Siapkan state menggunakan `useState`:
-    *   `data`: Untuk menampung keseluruhan data *sales page* dari backend (terutama yang berisi *property* `generated_content`).
-    *   `loading`: Boolean dengan inisialisasi `true` untuk menampung status *fetching*.
-    *   `error`: Untuk menampung pesan kesalahan (jika ada).
-3.  Gunakan `useEffect` untuk mengambil data dari backend melalui `axios` (instance `api` dari `src/lib/axios.ts`). Lakukan request `GET` ke endpoint yang sesuai, misalnya `/api/auth/sales-pages/${params.id}` *(Catatan: pastikan untuk menyesuaikan endpoint dengan ketersediaan di backend Anda)*.
-4.  Tampilkan indikator *loading* (misal spinner) jika state `loading` masih bernilai `true`.
-5.  Tampilkan pesan error jika terjadi kesalahan atau jika data `generated_content` tidak ditemukan.
+### Langkah 1: Pengujian Login & Register
+1. Buka URL aplikasi *production* di browser.
+2. Navigasi ke halaman **Register**. Buat akun baru dengan mengisi email dan password *dummy*.
+3. Pastikan proses registrasi berhasil dan kamu diarahkan ke halaman Login atau langsung masuk ke Dashboard.
+4. Lakukan **Logout** untuk memastikan *session* berhasil dihapus.
+5. Navigasi ke halaman **Login**. Masuk kembali menggunakan akun yang baru saja dibuat.
+6. **Ekspektasi:** Login berhasil dan pengguna langsung diarahkan ke halaman Dashboard utama tanpa ada pesan error.
 
-### Tahap 3: Pembuatan Komponen UI per Section (Render JSON)
-Asumsikan data berhasil diambil dan disimpan dalam variabel `content = data.generated_content`. Rancang UI menggunakan Tailwind CSS agar *modern* dan *clean* (sebaiknya selaras dengan tema dark/glassmorphism yang sudah ada):
+### Langkah 2: Pengujian Generate Sales Page
+1. Di dalam Dashboard, akses fitur pembuatan Sales Page.
+2. Isi form input (seperti nama produk, deskripsi, dll) dengan data yang sesuai.
+3. Buka *Developer Tools* (tekan F12), masuk ke tab **Network**.
+4. Tekan tombol **Generate/Submit**.
+5. Perhatikan permintaan (request) di tab Network. Pastikan request ke API OpenAI/Backend merespons dengan status `200 OK`.
+6. **Ekspektasi:** Sistem mengembalikan respon sukses, menyimpan data ke database, dan mengarahkan pengguna ke halaman hasil/preview.
 
-1.  **Hero Section:** 
-    *   Tampilkan `content.headline` menggunakan tag H1 dengan ukuran font besar (`text-4xl` atau `text-5xl`), tebal (`font-bold`), dan posisikan di tengah (`text-center`).
-    *   Tampilkan `content.subheadline` di bawahnya dengan warna teks yang sedikit redup (`text-white/70`).
-2.  **Benefits Section:** 
-    *   Buat sebuah *grid layout* (misal `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) untuk merender perulangan (`map`) dari array `content.benefits`.
-    *   Tampilkan setiap benefit dalam komponen *card* sederhana (menggunakan *border*, *padding*, dan *rounded corners*).
-3.  **Features Section:** 
-    *   Render perulangan array `content.features`. Bisa menggunakan struktur daftar berurutan bergaya modern (misal dengan icon checkmark di sebelah kirinya) atau bentuk *card* berjejer vertikal.
-4.  **Testimonial Section:** 
-    *   Render data `content.testimonial` ke dalam blok kutipan (`<blockquote>`). Berikan gaya cetak miring (*italic*) dan beri batas *border* kiri yang tebal untuk menegaskan gaya kutipan.
-5.  **Pricing Section:** 
-    *   Desain sebuah *pricing card* yang menonjol (berikan bayangan tebal/glow effect). Render isi teks dari `content.pricing` ke dalam *card* tersebut.
-6.  **CTA (Call to Action) Section:** 
-    *   Di bagian terbawah, buat area penutup dengan teks dari `content.cta`. 
-    *   Tambahkan sebuah tombol utama (misal menggunakan background gradient) untuk mensimulasikan tombol pembelian/aksi.
+### Langkah 3: Pengujian Halaman Preview
+1. Setelah *generate* selesai, periksa halaman Preview dengan teliti.
+2. Periksa apakah semua bagian (Hero, Benefits, Features, Testimonial, Pricing, CTA) terisi dengan data JSON yang benar.
+3. Pastikan desain menggunakan *spacing* yang konsisten, tipografi yang jelas (font Inter), dan desain modern.
+4. Lakukan uji coba **Mobile Responsiveness**: Kecilkan ukuran window browser (atau gunakan mode *Device Toolbar* di F12) dan pastikan UI tidak ada yang meluber (*overflow*) atau tumpang tindih.
+5. Uji coba tombol **Export HTML** di header. Pastikan file `.html` berhasil terunduh dan isinya valid.
+6. **Ekspektasi:** Halaman tampil sempurna, menarik, responsif di semua ukuran layar, dan tombol ekspor berfungsi.
 
-### Tahap 4: Polishing dan Responsivitas
-*   Bungkus keseluruhan konten dalam *container* (misalnya `<div className="max-w-5xl mx-auto px-4 py-12">`).
-*   Berikan *spacing* vertikal (`space-y-24` atau margin-top/bottom yang besar) antar *section* agar antarmuka terlihat lega (*breathing room*).
-*   Pastikan semua struktur grid menggunakan class responsif (seperti penggunaan prefiks `sm:`, `md:`, dan `lg:`) agar tata letak menyesuaikan dengan baik di layar ponsel pintar.
+### Langkah 4: Pengujian History (Riwayat)
+1. Navigasi ke menu **History** atau riwayat pembuatan di Dashboard.
+2. Pastikan Sales Page yang baru saja dibuat pada *Langkah 2* muncul di urutan teratas dalam daftar riwayat.
+3. Klik tombol detail/view pada item tersebut.
+4. **Ekspektasi:** Halaman diarahkan ke Preview page dari id riwayat tersebut, dan data berhasil dipanggil dari backend tanpa ada bagian yang hilang.
+
+### Langkah 5: Pengecekan Error Console
+1. Selama melakukan Langkah 1 hingga 4, pastikan tab **Console** di Developer Tools (F12) selalu terbuka.
+2. Perhatikan apakah ada teks berwarna merah (*Error*) atau kuning (*Warning*). Perhatikan khusus error mengenai CORS, *React hydration*, *Network failure*, atau pemanggilan fungsi pada objek yang *undefined*.
+3. **Ekspektasi:** Console sepenuhnya bersih dari error.
 
 ---
-**Peringatan Tambahan (Sesuai Rules):** Saat memberikan balasan hasil implementasi tugas ini, pastikan memberikan **NO EXPLANATION, CODE ONLY**. Cukup berikan output kode dari file yang dibuat atau dimodifikasi.
+
+## 🐛 Panduan Penanganan Bug Kecil
+
+Jika kamu menemukan **bug kecil** selama pengujian (misalnya typo teks, error styling CSS, nilai *undefined* yang membuat halaman putih/crash, atau tombol tidak berfungsi):
+
+1. Lakukan *debugging* dan temukan akar masalahnya di kode sumber (*source code*).
+2. Lakukan perbaikan secara efisien. Jangan merombak arsitektur, perbaiki hanya bagian yang bermasalah.
+3. Buat **Commit** dengan pesan yang sangat jelas agar programmer lain tahu apa yang terjadi.
+
+**Format Pesan Commit yang Diwajibkan:**
+Gunakan format yang informatif dengan menyertakan *apa* masalahnya dan *bagaimana* memperbaikinya.
+*Contoh:*
+> `fix(preview): menangani nilai undefined pada daftar features`
+> 
+> Penjelasan: Menambahkan optional chaining `content.features?.map` di `page.tsx` agar aplikasi tidak crash saat AI secara tidak sengaja tidak mengembalikan properti features.
+
+## 🏁 Kriteria Penyelesaian
+Issue ini dapat ditandai sebagai **Selesai (Closed)** apabila:
+1. Seluruh item pada **Checklist Utama** sudah tercentang hijau setelah verifikasi di *production*.
+2. Apabila ditemukan bug kecil, perbaikannya sudah diselesaikan dan di-commit menggunakan format pesan yang telah ditentukan.
