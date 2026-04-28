@@ -19,3 +19,7 @@ Route::prefix('auth')->group(function () {
         Route::delete('/sales-pages/{id}', [GeneratorController::class, 'destroy']);
     });
 });
+
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
