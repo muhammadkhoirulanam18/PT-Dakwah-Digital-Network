@@ -26,16 +26,22 @@ export default function LoginPage() {
       const { data } = await api.post('/api/auth/login', form);
       Cookies.set('auth_token', data.token, { expires: 7 });
       router.push('/dashboard');
-    } catch (err: unknown) {
-      const error = err as { response?: { data?: { errors?: Record<string, string[]>; message?: string } } };
-      if (error.response?.data?.errors) {
+    } catch (err: any) {
+      if (err.response?.data?.errors) {
+        // Validation errors from Laravel (422)
         const flat: Record<string, string> = {};
-        for (const [key, msgs] of Object.entries(error.response.data.errors)) {
+        for (const [key, msgs] of Object.entries(err.response.data.errors)) {
           flat[key] = (msgs as string[])[0];
         }
         setErrors(flat);
+      } else if (err.response?.data?.message) {
+        // General API error with message
+        setErrors({ general: err.response.data.message });
+      } else if (err.message) {
+        // Axios/Network error (e.g., CORS, server down)
+        setErrors({ general: `Connection error: ${err.message}` });
       } else {
-        setErrors({ general: error.response?.data?.message ?? 'Something went wrong.' });
+        setErrors({ general: 'Terjadi kesalahan sistem yang tidak diketahui.' });
       }
     } finally {
       setLoading(false);
