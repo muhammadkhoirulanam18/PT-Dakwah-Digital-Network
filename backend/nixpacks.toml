@@ -5,7 +5,13 @@ nixPkgs = ["php83", "php83Packages.composer", "nodejs"]
 cmds = ["composer install --no-dev --optimize-autoloader"]
 
 [phases.build]
-cmds = ["php artisan optimize"]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "php artisan optimize",
+    "php artisan view:cache"
+]
 
 [start]
-cmd = "php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT"
+# Perintah ini menjalankan migrasi database otomatis, 
+# mengoptimalkan cache, lalu menjalankan server Nginx + PHP-FPM bawaan Nixpacks
+cmd = "php artisan migrate --force && php artisan config:cache && php artisan route:cache && php-fpm -D && nginx -g 'daemon off;'"

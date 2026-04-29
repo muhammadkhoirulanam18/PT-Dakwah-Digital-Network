@@ -29,7 +29,10 @@ export default function RegisterPage() {
 
     try {
       const { data } = await api.post('/api/auth/register', form);
-      Cookies.set('auth_token', data.token, { expires: 7 });
+      Cookies.set('auth_token', data.token, { 
+        expires: 7, 
+        secure: process.env.NODE_ENV === 'production' 
+      });
       router.push('/dashboard');
     } catch (err: any) {
       if (err.response?.data?.errors) {
