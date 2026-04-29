@@ -1,74 +1,59 @@
-# Issue: Quality Assurance (QA) & Production Verification
+# Issue: Investigasi "Connection error: Network Error" di Production
 
-## 🎯 Objektif
-Tugas ini ditujukan untuk Junior Programmer atau AI Model. Tujuan utama dari tugas ini adalah untuk melakukan verifikasi langsung di lingkungan *production* (produksi) guna memastikan semua fitur utama aplikasi berjalan dengan lancar tanpa kendala.
+## 📌 Konteks Masalah
+Aplikasi mengalami `Connection error: Network Error` saat melakukan request dari Frontend (Vercel) ke Backend (Railway). Database juga di-host di Railway. Secara level kode (konfigurasi Axios, pengaturan CORS di `cors.php`, dan routing API), perbaikan telah dilakukan dan sudah dipastikan menggunakan *best practice*. Namun, error ini masih muncul, yang mengindikasikan adanya masalah konfigurasi pada tingkat infrastruktur (environment variables) atau konektivitas antar-layanan.
 
-## 📝 Checklist Utama
-- [ ] Login dan Register berfungsi normal
-- [ ] Fitur Generate Sales Page berhasil membuat konten
-- [ ] Halaman Preview UI tampil dengan benar, rapi, dan responsif
-- [ ] Data History (riwayat pembuatan sales page) tersimpan dan dapat diakses
-- [ ] Tidak ada error di *browser console* pada semua halaman
+## 🎯 Tujuan Tugas
+Tugas Anda (Junior Programmer / AI) adalah memeriksa, mengidentifikasi, dan memperbaiki konfigurasi deployment di **Vercel** dan **Railway** agar Frontend dapat berkomunikasi dengan Backend tanpa terhalang *Network Error* atau isu CORS.
 
 ---
 
-## 🛠️ Tahapan Implementasi & Pengujian (Step-by-Step Guide)
+## 🔍 Kemungkinan Penyebab (Hipotesis)
 
-Silakan ikuti langkah-langkah pengujian berikut secara berurutan. Panduan ini dirancang sangat detail agar mudah diikuti.
-
-### Langkah 1: Pengujian Login & Register
-1. Buka URL aplikasi *production* di browser.
-2. Navigasi ke halaman **Register**. Buat akun baru dengan mengisi email dan password *dummy*.
-3. Pastikan proses registrasi berhasil dan kamu diarahkan ke halaman Login atau langsung masuk ke Dashboard.
-4. Lakukan **Logout** untuk memastikan *session* berhasil dihapus.
-5. Navigasi ke halaman **Login**. Masuk kembali menggunakan akun yang baru saja dibuat.
-6. **Ekspektasi:** Login berhasil dan pengguna langsung diarahkan ke halaman Dashboard utama tanpa ada pesan error.
-
-### Langkah 2: Pengujian Generate Sales Page
-1. Di dalam Dashboard, akses fitur pembuatan Sales Page.
-2. Isi form input (seperti nama produk, deskripsi, dll) dengan data yang sesuai.
-3. Buka *Developer Tools* (tekan F12), masuk ke tab **Network**.
-4. Tekan tombol **Generate/Submit**.
-5. Perhatikan permintaan (request) di tab Network. Pastikan request ke API OpenAI/Backend merespons dengan status `200 OK`.
-6. **Ekspektasi:** Sistem mengembalikan respon sukses, menyimpan data ke database, dan mengarahkan pengguna ke halaman hasil/preview.
-
-### Langkah 3: Pengujian Halaman Preview
-1. Setelah *generate* selesai, periksa halaman Preview dengan teliti.
-2. Periksa apakah semua bagian (Hero, Benefits, Features, Testimonial, Pricing, CTA) terisi dengan data JSON yang benar.
-3. Pastikan desain menggunakan *spacing* yang konsisten, tipografi yang jelas (font Inter), dan desain modern.
-4. Lakukan uji coba **Mobile Responsiveness**: Kecilkan ukuran window browser (atau gunakan mode *Device Toolbar* di F12) dan pastikan UI tidak ada yang meluber (*overflow*) atau tumpang tindih.
-5. Uji coba tombol **Export HTML** di header. Pastikan file `.html` berhasil terunduh dan isinya valid.
-6. **Ekspektasi:** Halaman tampil sempurna, menarik, responsif di semua ukuran layar, dan tombol ekspor berfungsi.
-
-### Langkah 4: Pengujian History (Riwayat)
-1. Navigasi ke menu **History** atau riwayat pembuatan di Dashboard.
-2. Pastikan Sales Page yang baru saja dibuat pada *Langkah 2* muncul di urutan teratas dalam daftar riwayat.
-3. Klik tombol detail/view pada item tersebut.
-4. **Ekspektasi:** Halaman diarahkan ke Preview page dari id riwayat tersebut, dan data berhasil dipanggil dari backend tanpa ada bagian yang hilang.
-
-### Langkah 5: Pengecekan Error Console
-1. Selama melakukan Langkah 1 hingga 4, pastikan tab **Console** di Developer Tools (F12) selalu terbuka.
-2. Perhatikan apakah ada teks berwarna merah (*Error*) atau kuning (*Warning*). Perhatikan khusus error mengenai CORS, *React hydration*, *Network failure*, atau pemanggilan fungsi pada objek yang *undefined*.
-3. **Ekspektasi:** Console sepenuhnya bersih dari error.
+1.  **Mismatch Environment Variables:** `NEXT_PUBLIC_API_URL` di Vercel mungkin salah ketik, masih menggunakan `http://localhost`, atau menggunakan HTTP (bukan HTTPS).
+2.  **CORS Terblokir Penuh:** `FRONTEND_URL` di Railway mungkin tidak persis sama dengan domain asal (origin) Vercel.
+3.  **Backend Gagal Start / Crash:** Aplikasi Laravel di Railway mungkin gagal berjalan karena konfigurasi Database yang salah, sehingga endpoint API benar-benar mati.
+4.  **Mixed Content Policy:** Browser memblokir koneksi karena frontend berjalan di HTTPS (Vercel) namun mencoba mengakses backend lewat HTTP biasa.
 
 ---
 
-## 🐛 Panduan Penanganan Bug Kecil
+## 🛠️ Rencana Aksi (Action Plan) / Langkah Pemeriksaan
 
-Jika kamu menemukan **bug kecil** selama pengujian (misalnya typo teks, error styling CSS, nilai *undefined* yang membuat halaman putih/crash, atau tombol tidak berfungsi):
+Harap ikuti langkah-langkah investigasi berikut secara berurutan:
 
-1. Lakukan *debugging* dan temukan akar masalahnya di kode sumber (*source code*).
-2. Lakukan perbaikan secara efisien. Jangan merombak arsitektur, perbaiki hanya bagian yang bermasalah.
-3. Buat **Commit** dengan pesan yang sangat jelas agar programmer lain tahu apa yang terjadi.
+### Tahap 1: Verifikasi Kondisi Backend (Railway)
+1. **Cek Status Service**: Buka dashboard Railway, pastikan service backend berstatus **Active** (warna hijau).
+2. **Cek Endpoint Manual**: Coba akses URL backend langsung dari browser Anda. Tambahkan path `/api/health` jika ada, atau sekadar akses root domainnya (contoh: `https://pt-dakwah-backend.up.railway.app/api/health`).
+    - *Ekspektasi*: Muncul respon JSON atau halaman kosong tanpa error "Site not found".
+3. **Cek Variabel Railway (Tab Variables)**:
+    - Pastikan `FRONTEND_URL` berisi URL Vercel secara eksak. Contoh benar: `https://pt-dakwah.vercel.app` (TANPA trailing slash `/` di akhir).
+    - Pastikan `SANCTUM_STATEFUL_DOMAINS` berisi domain tanpa protokol. Contoh benar: `pt-dakwah.vercel.app`.
+    - Pastikan variabel koneksi database (`DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) terisi dengan benar sesuai kredensial database yang diberikan oleh Railway (biasanya tersedia di tab "Variables" milik service PostgreSQL/MySQL di Railway).
+4. **Cek Log Deployment (Tab Deployments -> View Logs)**:
+    - Cari pesan error terkait gagal terhubung ke database.
+    - Pastikan perintah `php artisan migrate --force` sukses dijalankan di awal log.
 
-**Format Pesan Commit yang Diwajibkan:**
-Gunakan format yang informatif dengan menyertakan *apa* masalahnya dan *bagaimana* memperbaikinya.
-*Contoh:*
-> `fix(preview): menangani nilai undefined pada daftar features`
-> 
-> Penjelasan: Menambahkan optional chaining `content.features?.map` di `page.tsx` agar aplikasi tidak crash saat AI secara tidak sengaja tidak mengembalikan properti features.
+### Tahap 2: Verifikasi Kondisi Frontend (Vercel)
+1. **Cek Variabel Vercel**: Buka dashboard Vercel -> Project -> Settings -> Environment Variables.
+2. **Validasi `NEXT_PUBLIC_API_URL`**:
+    - Harus diawali dengan `https://` (wajib, jangan HTTP).
+    - Harus berupa URL Railway backend Anda.
+    - Jangan menggunakan akhiran slash `/` atau `/api`. Contoh benar: `https://pt-dakwah-backend.up.railway.app`.
+3. **Redeploy**: Jika Anda baru saja mengubah variabel di Vercel, pastikan Anda melakukan **Redeploy** agar frontend di-build ulang menggunakan variabel terbaru.
 
-## 🏁 Kriteria Penyelesaian
-Issue ini dapat ditandai sebagai **Selesai (Closed)** apabila:
-1. Seluruh item pada **Checklist Utama** sudah tercentang hijau setelah verifikasi di *production*.
-2. Apabila ditemukan bug kecil, perbaikannya sudah diselesaikan dan di-commit menggunakan format pesan yang telah ditentukan.
+### Tahap 3: Inspeksi Lewat Browser (DevTools)
+Jika Tahap 1 & 2 sudah benar namun masih error:
+1. Buka halaman frontend Anda di Chrome/Edge/Firefox.
+2. Tekan `F12` (atau klik kanan -> Inspect), lalu buka tab **Console** dan **Network**.
+3. Coba lakukan *Register* atau *Login*.
+4. **Analisis Pesan**:
+    - Jika tab *Console* merah dengan tulisan `CORS policy: No 'Access-Control-Allow-Origin' header is present`, berarti masalah ada di `FRONTEND_URL` Railway yang belum terdeteksi.
+    - Jika tab *Console* merah dengan pesan `Mixed Content`, berarti URL Backend di Vercel masih menggunakan `http://`.
+    - Jika tab *Network* menunjukkan status `500 Internal Server Error`, berarti backend gagal memproses (kemungkinan besar masalah koneksi database). Cek log Railway.
+
+---
+
+## 📝 Instruksi Tambahan untuk Junior/AI
+
+-   **Dilarang mengubah kode secara sembarangan**: Sebelum memodifikasi `axios.ts` atau file `cors.php`, pastikan Anda sudah melakukan inspeksi via browser (Tahap 3). Struktur kode saat ini sudah diatur menggunakan standar *best practice*.
+-   **Laporkan Hasil**: Silakan update dokumen ini atau tambahkan komentar dengan hasil *screenshot* tab *Network/Console* jika error belum terpecahkan.
