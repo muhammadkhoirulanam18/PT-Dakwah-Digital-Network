@@ -8,22 +8,26 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 Route::post('/register', function (Request $request) {
-    $request->validate([
+    $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
         'password' => 'required|string|min:6',
     ]);
 
     $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
     ]);
 
     return response()->json([
         'message' => 'User registered successfully',
         'user' => $user
     ], 201);
+});
+
+Route::get('/test', function () {
+    return response()->json(['status' => 'ok']);
 });
 
 Route::prefix('auth')->group(function () {
