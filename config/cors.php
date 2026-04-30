@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL')],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +29,11 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true,
+    /*
+    | supports_credentials MUST be false when allowed_origins is '*'.
+    | The browser spec forbids wildcard + credentials simultaneously.
+    | Since we use Bearer token auth (not cookies), credentials are not needed.
+    */
+    'supports_credentials' => false,
 
 ];
